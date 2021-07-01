@@ -1,0 +1,19 @@
+{
+  "name": "it122_demo",
+  "version": "1.0.0",
+  "description": "demo for the first class of it122 summer 21 ",
+  "main": "demo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gift-Tanakan/it122_Javascript2Summer21.git"
+  },
+  "author": "gift homsaen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gift-Tanakan/it122_Javascript2Summer21/issues"
+  },
+  "homepage": "https://github.com/Gift-Tanakan/it122_Javascript2Summer21#readme"
+}
