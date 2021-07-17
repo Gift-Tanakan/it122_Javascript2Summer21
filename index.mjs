@@ -1,7 +1,7 @@
 console.log('Welcome to IT122')
 
-import http from 'http';
-import { parse } from 'querystring';
+import http from "http";
+import { parse } from "querystring";
 import { getAll, getItem } from "./data.mjs";
 
 
@@ -9,22 +9,19 @@ http.createServer((req,res) => {
 
     let url = req.url.split("?"); //separate route from query string
     let query = parse(url[1]);
-    var path = req.url.toString();
+    var path = req.url.toLowerCase();
     // console.log(url)
     console.log(path)
     console.log(query)
-    switch(path) {
+    switch(url[0]) {
         case '/':
             res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(JSON.stringify(getAll)); // show all items -- choose either this or below
-            // res.end(JSON.stringify(getItem)); // show one item
+            res.end(JSON.stringify(getAll)); 
             break;
 
-        //this case is still not working. 
-            case '/detail':
+        case '/detail':
             res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(JSON.stringify({ name: "oatly" })); // show all items -- choose either this or below
-            // res.end(JSON.stringify(getItem)); // show one item
+            res.end(JSON.stringify(getItem(query.name))); 
             break;
 
         case '/about':
