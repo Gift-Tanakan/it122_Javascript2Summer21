@@ -1,0 +1,22 @@
+        <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Home page</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/styles.css">
+    </head>
+    <body>
+        <div class="wrapper">
+        <h1>Home page</h1>
+
+        <h2>Plant-based Milk</h2>
+        {{#each plantBasedMilk}}
+        <li><a href="/detail?name={{name}}">{{name}}</a></li>
+        {{/each}}
+        </div>
+        <script src="" async defer></script>
+</body>
+</html>
