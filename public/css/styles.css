@@ -1,0 +1,14 @@
+*{
+
+    box-sizing: border-box;
+}
+
+body {
+    background: bisque;
+    font-family: Raleway, verdana;
+}
+
+.wrapper {
+    margin: 20px auto;
+}
+
