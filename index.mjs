@@ -1,36 +1,48 @@
 console.log('Welcome to IT122')
 
-import http from "http";
-import { parse } from "querystring";
+'use strict'
+import * as plantMilk from "./data.mjs";
+import express, { query } from 'express';
 import { getAll, getItem } from "./data.mjs";
+import handlebars from "express-handlebars";
+import exphbs from "express-handlebars";
+
+const app = express();
 
 
-http.createServer((req,res) => {
+app.set('port', process.env.PORT || 3000);
+app.use(express.static('public')); // set location for static files
+app.use(express.urlencoded({ extended: true })); //Parse URL-encoded bodies
+app.use(express.json()); //used to parse JSON bodies
 
-    let url = req.url.split("?"); //separate route from query string
-    let query = parse(url[1]);
-    var path = req.url.toLowerCase();
-    // console.log(url)
-    console.log(path)
-    console.log(query)
-    switch(url[0]) {
-        case '/':
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(JSON.stringify(getAll)); 
-            break;
+app.engine("handlebars", exphbs({defaultLayout: false}));
+app.set("view engine", "handlebars");
 
-        case '/detail':
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(JSON.stringify(getItem(query.name))); 
-            break;
+//send file
+app.get('/', (req, res) => {
+    res.render('home', {plantBasedMilk: plantMilk.getAll()});
+});
+   
+// send plain text response
+app.get('/about', (req,res) => {
+res.type('text/plain');
+res.send('A bit about me: Code x craft x write x practice sustainability | I\'m trying to combine them all to make the planet less miserable.');
+});
 
-        case '/about':
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end('About page || Something about me: I\'m a Programming AAS-T student and a Web Manager at the Seattle Collegian, a student-run newspaper. I cover the column, Give me a break!, as I believe that everyone needs a break once in a while during this stressful time. With a big interest in environmental issues, I practice low-waste living and aim to use my technical skills to help solve those problems. For example, building an application that locates all the zero-waste grocery stores around Seattle area and that matches the user\'s product search with their nearest store. I enjoy improving the Collegian website and practicing web development skills as much as writing, baking, cocoa-powder painting, and listening to podcasts.');
-            break;
-        default:
-            res.writeHead(404, {'Content-Type': 'text/plain'});
-            res.end('Not found');
-            break;
-    }
-}).listen(process.env.PORT || 3000);
+// render detail route
+app.get('/detail', (req,res) => {
+let result = plantMilk.getItem(req.query.name);
+res.render('details', {name: req.query.name, result: result });
+})
+
+// define 404 handler
+app.use((req,res) => {
+res.type('text/plain');
+res.status(404);
+res.send('404 - Not found');
+});
+
+//start server
+app.listen(app.get('port'), () => {
+console.log('Express started');
+});
