@@ -16,15 +16,15 @@
         <h1>{{ result.name }} details</h1>
        
         
-        {{#each plantBasedMilk}}
-        <li><a href="/detail?name={{name}}">{{name}}</a></li>
+        {{#each plantbasedmilks}}
+        <li><a href="/detail?name={{ name }}">{{ name }}</a></li>
         {{/each}}
 
         {{#if result}}
         <li>Brand: {{ result.name }}</li>
         <li>Producer: {{ result.producer }}</li>
         <li>Type: {{ result.type }}</li>
-        <li>Price: {{result.price}}</li>
+        <li>Price: {{ result.price }}</li>
         {{else}}
             not found
         {{/if}}
