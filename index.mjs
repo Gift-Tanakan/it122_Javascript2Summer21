@@ -22,25 +22,27 @@ app.set("view engine", "handlebars");
 app.get('/', (req,res,next) => {
     PlantBasedMilk.find({}).lean()
     .then((plantbasedmilks) => {
-        res.render('home', {plantbasedmilks})
+        res.render('home', { plantbasedmilks });
     })
     .catch(err => next(err));
 });
    
 // send plain text response
 app.get('/about', (req,res) => {
-res.type('text/plain');
-res.send('A bit about me: Code x craft x write x practice sustainability | I\'m trying to combine them all to make the planet less miserable.');
+    res.type('text/plain');
+    res.send('A bit about me: Code x craft x write x practice sustainability | I\'m trying to combine them all to make the planet less miserable.');
 });
 
 app.get('/detail', (req,res,next) => {
     // db query can use request parameters
-    PlantBasedMilk.findOne({ name:req.query.name }).lean()
-        .then((plantbasedmilk) => {
-            res.render('details', {result: plantbasedmilk} );
+    PlantBasedMilk.findOne({ name:req.query.name}).lean()
+        .then((plantmilk) => {
+            res.render('details', { result: plantmilk } );
+            // res.json(plantbasedmilks)
         })
         .catch(err => next(err));
 });
+
 
 // define 404 handler
 app.use((req,res) => {
