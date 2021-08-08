@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Home page</title>
+        <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/styles.css">
+    </head>
+    <body>
+        <h1>Home page</h1>
+        <h2>Plant-based Milk</h2>
+
+        <div id="root"></div>
+            <script type="text/babel">
+
+    const plantbasedmilks = {{{plantbasedmilks}}}
+
+    {{!-- click event handler --}}
+        const showDetail = (event) => {
+    {{!-- <a href={"/detail?name=" + item.name}> --}}
+        console.log(event.target)
+        console.log(event.target.innerText)
+        console.log(event.target.id)
+        window.location.href = "/detail?name=" + event.target.innerText;
+    }
+
+
+const Plantbasedmilks = (props) => {
+    const listItems = props.names.map((item) =>  
+    <li key={item._id} id = {item._id} onClick={props.clickHandler}>
+        {item.name}
+        </li>);
+    return <ul>{listItems}</ul>
+}
+
+ReactDOM.render (
+    <div><Plantbasedmilks names = {plantbasedmilks} clickHandler = {showDetail}/></div>,
+    document.getElementById('root')
+)
+    
+    </script>
+
+
+        
+</body>
+</html>
