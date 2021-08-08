@@ -21,6 +21,27 @@ app.use('/api', cors()); // set Access-Control-Allow-Origin header for api route
 app.engine("handlebars", exphbs({defaultLayout: false}));
 app.set("view engine", "handlebars");
 
+////////////// USE REACT HERE  ////////////////
+// homepage, fetch data from mongodb
+app.get('/', (req,res,next) => {
+    PlantBasedMilk.find({}).lean()
+    .then((plantbasedmilks) => {
+        // res.render('home-react', { plantbasedmilks });
+        res.render('home-react', {plantbasedmilks: JSON.stringify(plantbasedmilks)});
+        console.log(plantbasedmilks)
+    })
+    .catch(err => next(err));
+});
+
+// detail route, fetch data from mongodb
+app.get('/detail', (req,res,next) => {
+    PlantBasedMilk.findOne({ name:req.query.name}).lean()
+    .then((plantmilk) => {
+        res.render('details', { result: plantmilk } );
+    })
+    .catch(err => next(err));
+});
+
 // api show all items
 app.get('/api/plantbasedmilks', (req, res) => {
     const plantbasedmilks = plantMilk.getAll();
@@ -42,7 +63,7 @@ app.get('/api/plantbasedmilks/:name', (req,res) => {
     }
   });
 
-// api delete
+// api delete -> id
 app.get('/api/delete/:id', (req,res, next) => {
     PlantBasedMilk.deleteOne({"_id":req.params.id }, (err, result) => {
         if (err) return next(err);
@@ -76,17 +97,6 @@ app.post('/api/add/', (req,res, next) => {
 app.get('/about', (req,res) => {
     res.type('text/plain');
     res.send('A bit about me: Code x craft x write x practice sustainability | I\'m trying to combine them all to make the planet less miserable.');
-});
-
-// detail route
-app.get('/detail', (req,res,next) => {
-    // db query can use request parameters
-    PlantBasedMilk.findOne({ name:req.query.name}).lean()
-        .then((plantmilk) => {
-            res.render('details', { result: plantmilk } );
-            // res.json(plantbasedmilks)
-        })
-        .catch(err => next(err));
 });
 
 
