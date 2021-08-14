@@ -16,36 +16,89 @@
         <h2>Plant-based Milk</h2>
 
         <div id="root"></div>
-            <script type="text/babel">
-
+        <script type="text/babel">
+    //fetch data from database
     const plantbasedmilks = {{{plantbasedmilks}}}
-
-    {{!-- click event handler --}}
-        const showDetail = (event) => {
-    {{!-- <a href={"/detail?name=" + item.name}> --}}
-        console.log(event.target)
-        console.log(event.target.innerText)
-        console.log(event.target.id)
-        window.location.href = "/detail?name=" + event.target.innerText;
-    }
-
-
-const Plantbasedmilks = (props) => {
-    const listItems = props.names.map((item) =>  
+    
+    //show data list
+    const Plantbasedmilks = (props) => {
+    const listItems = props.plantbasedmilks.map((item) =>  
     <li key={item._id} id = {item._id} onClick={props.clickHandler}>
         {item.name}
         </li>);
     return <ul>{listItems}</ul>
+    }
+
+    // detail function
+    const Detail = (props) => {
+    return <div>
+        {props.item.name} produced in {props.item.producer}
+        </div>
+    }
+
+    // form to allow updates function
+    const DetailForm = (props) => {
+    return <div>
+        <h2>Plant Milk Details</h2>
+        <form>
+        Name: <input type="text" name="name" onChange = {props.onChange} value={props.item.name || ""}/><br/>
+        Producer: <input type="text" name="producer" onChange = {props.onChange} value={props.item.producer || ""}/><br/>
+        
+        </form>
+        <button onClick = {props.onClear}>Clear</button> <button onClick = {props.onSave}>Save</button>
+        </div>
+    }
+
+    //set state to show detail (new function)
+    class App extends React.Component {
+    constructor(props) {
+    super(props);
+    this.state = {current_item: {}};
+    }
+
+    showDetail = (e) => {
+    const item = plantbasedmilks.find((item) => item.name == e.target.innerText)
+    this.setState({"current_item" : item})  
+    }
+
+    onChange = (e) => {  
+    const new_item = this.state.current_item;
+    new_item[e.target.name] = e.target.value;
+    this.setState({"current_item" : new_item})  
 }
 
-ReactDOM.render (
-    <div><Plantbasedmilks names = {plantbasedmilks} clickHandler = {showDetail}/></div>,
-    document.getElementById('root')
-)
-    
+    onClear = () => {
+    this.setState({"current_item" : {}})  
+}
+
+    onSave = () => {
+    let plantmilk = this.state.current_item;
+    console.log('save')
+    fetch("/api/add/", {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(plantmilk)
+    })
+    .then(res => res.json())
+    .then((json) => { console.log(json) });
+}
+
+    render() {
+        return ( 
+        <div>
+        <Plantbasedmilks plantbasedmilks={plantbasedmilks} clickHandler={this.showDetail}/>
+        <hr/>
+        <DetailForm item ={this.state.current_item} onSave = {this.onSave} onChange = {this.onChange} onClear = {this.onClear}/>
+        </div> );
+    }
+}
+
+ReactDOM.render(  <App />,  document.getElementById('root') );
+
+
     </script>
 
 
-        
+
 </body>
 </html>
